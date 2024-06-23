@@ -1,9 +1,10 @@
 import listKhodam from "@/resources/listKhodam";
-import { Alert, AlertIcon, Box, Button, Center, CloseButton, Flex, FormControl, FormLabel, HStack, Heading, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  Alert, AlertIcon, Box, Button, Center, CloseButton, Flex, FormControl, FormLabel, HStack, Heading, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Switch, Text, useDisclosure, useToast, useColorMode
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiOutlineInstagram, AiOutlineGithub, AiOutlineDollar } from "react-icons/ai";
 import { useBreakpointValue } from "@chakra-ui/react";
-
 
 const CheckKhodam = () => {
   const [name, setName] = useState("");
@@ -11,23 +12,35 @@ const CheckKhodam = () => {
   const [gambar, setGambar] = useState("");
   const [resultOpen, setResultOpen] = useState(false);
   const [riwayatCek, setRiwayatCek] = useState([]);
+  const [mode, setMode] = useState("");
   const toast = useToast();
   const lKhodam = listKhodam();
   const direction = useBreakpointValue({ base: 'column', md: 'row' });
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const {
     isOpen: isVisible,
     onClose,
     onOpen,
-  } = useDisclosure({ defaultIsOpen: true })
-
+  } = useDisclosure({ defaultIsOpen: true });
 
   useEffect(() => {
     if (khodam !== "") {
-      setRiwayatCek([...riwayatCek, `${name} memiliki khodam ${khodam}. Berhati-hatilah!`]);
-      setName("")
+      setRiwayatCek(prev => [`${name} memiliki khodam ${khodam}. Berhati-hatilah!`, ...prev]);
+      setName("");
+      setKhodam("");
     }
+
+    const storedColorMode = localStorage.getItem("chakra-ui-color-mode");
+    setMode(storedColorMode === "dark" ? "Dark Mode" : "Light Mode");
   }, [khodam]);
+
+  const handleColorSwitch = () => {
+    toggleColorMode();
+    const newMode = colorMode === "light" ? "Dark Mode" : "Light Mode";
+    setMode(newMode);
+    localStorage.setItem("chakra-ui-color-mode", colorMode === "light" ? "dark" : "light");
+  };
 
   const calculateKhodam = async () => {
     if (name === "") {
@@ -49,35 +62,33 @@ const CheckKhodam = () => {
       });
       setResultOpen(true);
     }
-  }
+  };
 
   const NoData = () => {
-    if (riwayatCek.length == 0) {
-      return isVisible ? (<Alert status='info' mt={4}>
-
-        <AlertIcon />
-        <Text fontSize='sm'>
-          Belum ada riwayat! Ayo check khodam kamu!
-        </Text>
-        <CloseButton
-          alignSelf='flex-start'
-          position='relative'
-          right={-1}
-          top={-1}
-          onClick={onClose}
-        />
-      </Alert>
-      )
-        : null
+    if (riwayatCek.length === 0) {
+      return isVisible ? (
+        <Alert status='info' mt={4}>     
+          <AlertIcon />
+          <Text fontSize='sm'>Belum ada riwayat! Ayo check khodam kamu!</Text>
+          <CloseButton
+            alignSelf='flex-start'
+            position='relative'
+            right={-1}
+            top={-1}
+            onClick={onClose}
+          />
+        </Alert>
+      ) : null;
     }
-  }
+    return null;
+  };
 
   const CopyRight = () => {
-    return <>
+    return (
       <Box p={8} borderWidth="1px" mx={4} mt={4} borderRadius={8} flex={1}>
         <Text fontSize='sm' as='cite'>Check Khodam Online By lanstheprodigy</Text>
         <Stack direction={direction} mt={4}>
-          <a href="https://www.instagram.com/ghufronakbar_" target="_blank">
+          <a href="https://www.instagram.com/ghufronakbar_" target="_blank" rel="noopener noreferrer">
             <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
               <Center>
                 <AiOutlineInstagram />
@@ -85,7 +96,7 @@ const CheckKhodam = () => {
               </Center>
             </Box>
           </a>
-          <a href="https://www.github.com/lanstheprodigy" target="_blank">
+          <a href="https://www.github.com/lanstheprodigy" target="_blank" rel="noopener noreferrer">
             <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
               <Center>
                 <AiOutlineGithub />
@@ -93,7 +104,7 @@ const CheckKhodam = () => {
               </Center>
             </Box>
           </a>
-          <a href="https://www.saweria.co/lanstheprodigy" target="_blank">
+          <a href="https://www.saweria.co/lanstheprodigy" target="_blank" rel="noopener noreferrer">
             <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
               <Center>
                 <AiOutlineDollar />
@@ -103,13 +114,19 @@ const CheckKhodam = () => {
           </a>
         </Stack>
       </Box>
-    </>
-  }
+    );
+  };
 
   return (
     <>
       <Box p={8} borderWidth="1px" mx={4} mt={4} borderRadius={8} flex={1}>
         <Heading>Check Khodam Online!</Heading>
+        <HStack alignItems="center" mt={4}>
+          <Switch id='switchColor' isChecked={colorMode === "dark"} onChange={handleColorSwitch} />
+          <Text fontSize='sm' ml={2}>
+            {mode}
+          </Text>
+        </HStack>
       </Box>
       <Flex direction='column'>
         <Box p={8} borderWidth="1px" mx={4} borderRadius={8} mt={4} flex={1}>
@@ -131,16 +148,14 @@ const CheckKhodam = () => {
             p={4}
             borderRadius={8}
             mt={4}
+            borderWidth="1px"
           >
             <NoData />
-
-            {riwayatCek.length === 0 ? null : (
-              riwayatCek.map((item, index) => (
-                <Box key={index} p={4} borderWidth="1px" mt={2} borderRadius={8}>
-                  <Text>{item}</Text>
-                </Box>
-              ))
-            )}
+            {riwayatCek.map((item, index) => (
+              <Box key={index} p={4} borderWidth="1px" mt={2} borderRadius={8}>
+                <Text>{item}</Text>
+              </Box>
+            ))}
           </Box>
         </Box>
         <CopyRight />
