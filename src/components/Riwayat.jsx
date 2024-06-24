@@ -1,7 +1,9 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import NoData from "@/components/NoData";
+import axios from "axios";
 import { io } from "socket.io-client";
+import ListRiwayat from "@/components/ListHRiwayat";
 
 const Riwayat = ({ name, khodam, setName, setKhodam }) => {
   const socket = io();
@@ -24,6 +26,21 @@ const Riwayat = ({ name, khodam, setName, setKhodam }) => {
     };
   }, []);
 
+  useEffect(() => {
+    hitIo();
+  }, []);
+
+  const hitIo = async () => {
+    try {
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_BASE_URL + "/api/socket"
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box p={8} borderWidth="1px" mx={4} borderRadius={8} mt={4} flex={1}>
       <Text>Riwayat Check Khodam :</Text>
@@ -37,9 +54,7 @@ const Riwayat = ({ name, khodam, setName, setKhodam }) => {
       >
         <NoData riwayatLength={riwayatCek.length} />
         {riwayatCek.map((item, index) => (
-          <Box key={index} p={4} borderWidth="1px" mt={2} borderRadius={8}>
-            <Text>{item}</Text>
-          </Box>
+          <ListRiwayat itemRiwayat={item} index={index}/>
         ))}
       </Box>
     </Box>

@@ -11,7 +11,15 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-const ModalResult = ({resultOpen,setResultOpen,name,khodam,gambar,setName,setKhodam,}) => {
+const ModalResult = ({
+  resultOpen,
+  setResultOpen,
+  name,
+  khodam,
+  gambar,
+  setName,
+  setKhodam,
+}) => {
   return (
     <Modal
       isOpen={resultOpen}
@@ -35,7 +43,13 @@ const ModalResult = ({resultOpen,setResultOpen,name,khodam,gambar,setName,setKho
           <Text>
             Khodam {name} adalah {khodam}
           </Text>
-          <Image mt={2} src={gambar} width="fit-content" height="fit-content" />
+          <Image
+            mt={2}
+            src={gambar}
+            width="100%"
+            height="auto"
+            style={{ objectFit: "contain" }}
+          />
         </ModalBody>
         <ModalFooter>
           <Button
