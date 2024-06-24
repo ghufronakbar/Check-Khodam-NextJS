@@ -5,42 +5,21 @@ import {
 import { useEffect, useState } from "react";
 import { AiOutlineInstagram, AiOutlineGithub, AiOutlineDollar } from "react-icons/ai";
 import { useBreakpointValue } from "@chakra-ui/react";
+import io from "socket.io-client";
+import axios from "axios";
+import Copyright from "@/components/Copyright";
+import Riwayat from "@/components/Riwayat";
+import Headers from "@/components/Header";
+import CekKhodam from "@/components/CekKhodam";
+import ModalResult from "@/components/ModalResult";
 
-const CheckKhodam = () => {
+const Index = ({ socket }) => {
   const [name, setName] = useState("");
   const [khodam, setKhodam] = useState("");
   const [gambar, setGambar] = useState("");
   const [resultOpen, setResultOpen] = useState(false);
-  const [riwayatCek, setRiwayatCek] = useState([]);
-  const [mode, setMode] = useState("");
   const toast = useToast();
   const lKhodam = listKhodam();
-  const direction = useBreakpointValue({ base: 'column', md: 'row' });
-  const { colorMode, toggleColorMode } = useColorMode();
-
-  const {
-    isOpen: isVisible,
-    onClose,
-    onOpen,
-  } = useDisclosure({ defaultIsOpen: true });
-
-  useEffect(() => {
-    if (khodam !== "") {
-      setRiwayatCek(prev => [`${name} memiliki khodam ${khodam}. Berhati-hatilah!`, ...prev]);
-      setName("");
-      setKhodam("");
-    }
-
-    const storedColorMode = localStorage.getItem("chakra-ui-color-mode");
-    setMode(storedColorMode === "dark" ? "Dark Mode" : "Light Mode");
-  }, [khodam]);
-
-  const handleColorSwitch = () => {
-    toggleColorMode();
-    const newMode = colorMode === "light" ? "Dark Mode" : "Light Mode";
-    setMode(newMode);
-    localStorage.setItem("chakra-ui-color-mode", colorMode === "light" ? "dark" : "light");
-  };
 
   const calculateKhodam = async () => {
     if (name === "") {
@@ -51,11 +30,13 @@ const CheckKhodam = () => {
         isClosable: true
       });
     } else {
+      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_URL + "/api/hello");
+      console.log(response);
       const random = Math.floor(Math.random() * (lKhodam.length - 1));
       setGambar(lKhodam[random].gambar);
       setKhodam(lKhodam[random].khodam);
       toast({
-        title: "Berhasil Check Khodam",
+        title: response?.data?.message,
         status: "success",
         position: "bottom",
         isClosable: true
@@ -64,127 +45,16 @@ const CheckKhodam = () => {
     }
   };
 
-  const NoData = () => {
-    if (riwayatCek.length === 0) {
-      return isVisible ? (
-        <Alert status='info' mt={4}>     
-          <AlertIcon />
-          <Text fontSize='sm'>Belum ada riwayat! Ayo check khodam kamu!</Text>
-          <CloseButton
-            alignSelf='flex-start'
-            position='relative'
-            right={-1}
-            top={-1}
-            onClick={onClose}
-          />
-        </Alert>
-      ) : null;
-    }
-    return null;
-  };
-
-  const CopyRight = () => {
-    return (
-      <Box p={8} borderWidth="1px" mx={4} mt={4} borderRadius={8} flex={1}>
-        <Text fontSize='sm' as='cite'>Check Khodam Online By lanstheprodigy</Text>
-        <Stack direction={direction} mt={4}>
-          <a href="https://www.instagram.com/ghufronakbar_" target="_blank" rel="noopener noreferrer">
-            <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
-              <Center>
-                <AiOutlineInstagram />
-                <Text ml={2} fontSize='sm'>ghufronakbar_</Text>
-              </Center>
-            </Box>
-          </a>
-          <a href="https://www.github.com/lanstheprodigy" target="_blank" rel="noopener noreferrer">
-            <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
-              <Center>
-                <AiOutlineGithub />
-                <Text ml={2} fontSize='sm'>lanstheprodigy</Text>
-              </Center>
-            </Box>
-          </a>
-          <a href="https://www.saweria.co/lanstheprodigy" target="_blank" rel="noopener noreferrer">
-            <Box p={2} borderWidth="1px" borderRadius={8} mt={1}>
-              <Center>
-                <AiOutlineDollar />
-                <Text ml={2} fontSize='sm'>lanstheprodigy</Text>
-              </Center>
-            </Box>
-          </a>
-        </Stack>
-      </Box>
-    );
-  };
-
   return (
     <>
-      <Box p={8} borderWidth="1px" mx={4} mt={4} borderRadius={8} flex={1}>
-        <Heading>Check Khodam Online!</Heading>
-        <HStack alignItems="center" mt={4}>
-          <Switch id='switchColor' isChecked={colorMode === "dark"} onChange={handleColorSwitch} />
-          <Text fontSize='sm' ml={2}>
-            {mode}
-          </Text>
-        </HStack>
-      </Box>
-      <Flex direction='column'>
-        <Box p={8} borderWidth="1px" mx={4} borderRadius={8} mt={4} flex={1}>
-          <FormControl>
-            <FormLabel>Ketik Nama Kamu:</FormLabel>
-            <Input value={name} onChange={(e) => { setName(e.target.value) }} />
-            <Center mt={4}>
-              <Button colorScheme='blue' onClick={calculateKhodam}>
-                Cek
-              </Button>
-            </Center>
-          </FormControl>
-        </Box>
-        <Box p={8} borderWidth="1px" mx={4} borderRadius={8} mt={4} flex={1}>
-          <Text>Riwayat Check Khodam :</Text>
-          <Box
-            maxHeight="200px"
-            overflowY="auto"
-            p={4}
-            borderRadius={8}
-            mt={4}
-            borderWidth="1px"
-          >
-            <NoData />
-            {riwayatCek.map((item, index) => (
-              <Box key={index} p={4} borderWidth="1px" mt={2} borderRadius={8}>
-                <Text>{item}</Text>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-        <CopyRight />
+      <Flex direction="column">
+        <Headers />
+        <CekKhodam name={name} setName={setName} calculateKhodam={calculateKhodam} />
+        <Riwayat name={name} khodam={khodam} setKhodam={setKhodam} setName={setName} socket={socket} />
+        <Copyright />
       </Flex>
-      <ModalResult resultOpen={resultOpen} setResultOpen={setResultOpen} name={name} khodam={khodam} gambar={gambar} />
+      <ModalResult resultOpen={resultOpen} setResultOpen={setResultOpen} name={name} khodam={khodam} gambar={gambar} setName={setName} setKhodam={setKhodam} />
     </>
   );
-}
-
-const ModalResult = ({ resultOpen, setResultOpen, name, khodam, gambar }) => {
-  return (
-    <Modal isOpen={resultOpen} onClose={() => setResultOpen(false)}>
-      <ModalOverlay>
-        <ModalContent>
-          <ModalHeader>Hasil Khodam Kamu</ModalHeader>
-          <ModalCloseButton onClick={() => { setResultOpen(false) }}></ModalCloseButton>
-          <ModalBody>
-            <Text>Khodam {name} adalah {khodam}</Text>
-            <Image mt={2} src={gambar} width="fit-content" height="fit-content" />
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' onClick={() => setResultOpen(false)}>
-              Cek Lagi
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </ModalOverlay>
-    </Modal>
-  );
-}
-
-export default CheckKhodam;
+};
+export default Index;
