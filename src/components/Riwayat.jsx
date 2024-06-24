@@ -2,7 +2,7 @@ import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import NoData from "@/components/NoData";
 import axios from "axios";
-import ListRiwayat from "@/components/ListHRiwayat";
+import ListRiwayat from "@/components/ListRiwayat";
 import { io } from "socket.io-client";
 
 const Riwayat = ({ name, khodam, setName, setKhodam }) => {
