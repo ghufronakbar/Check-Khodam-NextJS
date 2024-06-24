@@ -46,7 +46,7 @@ const CheckKhodam = ({}) => {
   useEffect(() => {
     const getNamePlaceholder = localStorage.getItem("name");
     setPlaceholder(getNamePlaceholder);
-  });
+  }, []);
 
   return (
     <>
