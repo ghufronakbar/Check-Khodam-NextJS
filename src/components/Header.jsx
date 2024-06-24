@@ -15,7 +15,7 @@ const Headers = () => {
   useEffect(() => {
     const storedColorMode = localStorage.getItem("chakra-ui-color-mode");
     setMode(storedColorMode === "dark" ? "Dark Mode" : "Light Mode");
-  });
+  },[]);
 
   const handleColorSwitch = () => {
     toggleColorMode();

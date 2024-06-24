@@ -2,29 +2,37 @@ import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import NoData from "@/components/NoData";
 import axios from "axios";
-import { io } from "socket.io-client";
 import ListRiwayat from "@/components/ListHRiwayat";
+import { io } from "socket.io-client";
 
 const Riwayat = ({ name, khodam, setName, setKhodam }) => {
-  const socket = io();
+  const [socket, setSocket] = useState(null);
   const [riwayatCek, setRiwayatCek] = useState([]);
 
   useEffect(() => {
-    if (khodam !== "") {
+    const newSocket = io();
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, []);
+
+  useEffect(() => {
+    if (khodam !== "" && socket) {
       const newHistory = `${name} memiliki khodam ${khodam}. Berhati-hatilah!`;
       socket.emit("addKhodamCheck", newHistory);
     }
-  }, [khodam]);
+  }, [khodam, name, socket]);
 
   useEffect(() => {
-    socket.on("newKhodamCheck", (data) => {
-      setRiwayatCek((prev) => [data, ...prev]);
-    });
+    if (socket) {
+      socket.on("newKhodamCheck", (data) => {
+        setRiwayatCek((prev) => [data, ...prev]);
+      });
 
-    return () => {
-      socket.off("newKhodamCheck");
-    };
-  }, []);
+      return () => {
+        socket.off("newKhodamCheck");
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     hitIo();
@@ -54,7 +62,7 @@ const Riwayat = ({ name, khodam, setName, setKhodam }) => {
       >
         <NoData riwayatLength={riwayatCek.length} />
         {riwayatCek.map((item, index) => (
-          <ListRiwayat itemRiwayat={item} index={index}/>
+          <ListRiwayat key={index} itemRiwayat={item} index={index} />
         ))}
       </Box>
     </Box>

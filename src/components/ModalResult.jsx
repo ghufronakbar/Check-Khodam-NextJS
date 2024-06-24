@@ -46,6 +46,7 @@ const ModalResult = ({
           <Image
             mt={2}
             src={gambar}
+            alt={`Harusnya gambar ${khodam}, tapi gatau kalo ga muncul`}
             width="100%"
             height="auto"
             style={{ objectFit: "contain" }}
