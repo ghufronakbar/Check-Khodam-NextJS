@@ -1,4 +1,4 @@
-const listKhodam = () => {
+const ListKhodam = () => {
 
   const khodamArray = [
     {
@@ -124,4 +124,4 @@ const listKhodam = () => {
   ];
   return khodamArray
 }
-export default listKhodam
+export default ListKhodam

@@ -1,4 +1,4 @@
-import listKhodam from "@/resources/listKhodam";
+import ListKhodam from "@/resources/ListKhodam";
 import { Flex, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Copyright from "@/components/Copyright";
@@ -16,7 +16,7 @@ const CheckKhodam = ({}) => {
   const [resultOpen, setResultOpen] = useState(false);
   const [warningOpen, setWarningOpen] = useState(true);
   const toast = useToast();
-  const lKhodam = listKhodam();
+  const lKhodam = ListKhodam();
   const [trigger, setTrigger] = useState(0);
 
   const calculateKhodam = async () => {
