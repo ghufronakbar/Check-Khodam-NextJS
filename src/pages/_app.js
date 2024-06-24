@@ -1,10 +1,13 @@
+import MetaName from "@/components/MetaName";
 import { ChakraProvider } from "@chakra-ui/react";
 const App = ({ Component, pageProps }) => {
 
-  return (
+  return (<>
     <ChakraProvider>
+      <MetaName />
       <Component {...pageProps} />
     </ChakraProvider>
+  </>
   );
 };
 
