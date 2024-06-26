@@ -1,4 +1,4 @@
-import { runMiddleware } from "@/utils/cors-middleware";
+import cors, { runMiddleware } from "@/utils/cors-middleware";
 import { Server } from "socket.io";
 
 export const config = {
