@@ -27,7 +27,7 @@ const listKhodam = () => {
     },
     {
       "khodam": "Baju Macan Tutul",
-      "gambar": "https://images.tokopedia.net/img/cache/500-square/product-1/2019/6/10/2797207/2797207_1c437bbe-beeb-48fd-81d2-2535a4c16a75_720_720.jpg"
+      "gambar": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.idntimes.com%2Fhype%2Fhumor%2Ffikri-xii-dpib-1%2Ffoto-lucu-patung-harimau-c1c2&psig=AOvVaw0PPY-VbQugWyX4HLwNT6Ks&ust=1719480726303000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCJji8v_6-IYDFQAAAAAdAAAAABAK"
     },
     {
       "khodam": "Singa Pemberani",
@@ -35,7 +35,7 @@ const listKhodam = () => {
     },
     {
       "khodam": "Susu Sapi",
-      "gambar": "https://images.tokopedia.net/img/cache/500-square/product-1/2019/6/10/2797207/2797207_1c437bbe-beeb-48fd-81d2-2535a4c16a75_720_720.jpg"
+      "gambar": "https://cdn.pixabay.com/photo/2018/06/05/12/25/milk-3455407_960_720.jpg"
     },
     {
       "khodam": "Daging Ayam",
@@ -84,10 +84,6 @@ const listKhodam = () => {
     {
       "khodam": "Alien Ijo",
       "gambar": "https://static.gatra.com/foldershared/images/2023/roh/03-Mar/Alien6.jpg"
-    },
-    {
-      "khodam": "Titan",
-      "gambar": "https://barta1.com/v2/wp-content/uploads/2019/12/mitos-raksasa-sangihe.jpg"
     },
     {
       "khodam": "Capybara",
