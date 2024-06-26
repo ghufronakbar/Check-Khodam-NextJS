@@ -13,43 +13,57 @@ const Riwayat = ({ name, khodam, setName, setKhodam }) => {
   useEffect(() => {
     const newSocket = io();
     setSocket(newSocket);
-    console.log(socket)
-    return () => newSocket.close();
+    console.log("Socket initialized:", newSocket);
+
+    newSocket.on("connect", () => {
+      console.log("Socket connected:", newSocket.id);
+    });
+
+    newSocket.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
+
+    return () => {
+      newSocket.close();
+      console.log("Socket closed");
+    };
   }, []);
 
   useEffect(() => {
     if (khodam !== "" && socket) {
       const newHistory = `${name} memiliki khodam ${khodam}. Berhati-hatilah!`;
+      console.log("Emitting addKhodamCheck with data:", newHistory);
       socket.emit("addKhodamCheck", newHistory);
     }
   }, [khodam, name, socket]);
 
   useEffect(() => {
     if (socket) {
+      console.log("Setting up listener for newKhodamCheck");
       socket.on("newKhodamCheck", (data) => {
+        console.log("Received newKhodamCheck with data:", data);
         setRiwayatCek((prev) => [data, ...prev]);
       });
 
       return () => {
+        console.log("Removing newKhodamCheck listener");
         socket.off("newKhodamCheck");
       };
     }
   }, [socket]);
 
   useEffect(() => {
+    console.log("Calling hitIo");
     hitIo();
   }, []);
 
   const hitIo = async () => {
     try {
-      const response = await axios.get(
-        baseURL + "/api/socket"
-      );
-      console.log(baseURL)
-      console.log(response)
+      const response = await axios.get(baseURL + "/api/socket");
+      console.log("Axios GET response:", response);
       return response;
     } catch (error) {
-      console.error(error);
+      console.error("Axios GET error:", error);
     }
   };
 
