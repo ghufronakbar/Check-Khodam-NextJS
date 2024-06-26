@@ -8,10 +8,12 @@ import { io } from "socket.io-client";
 const Riwayat = ({ name, khodam, setName, setKhodam }) => {
   const [socket, setSocket] = useState(null);
   const [riwayatCek, setRiwayatCek] = useState([]);
+  const baseURL = typeof window !== 'undefined' ? window.location.origin : '';
 
   useEffect(() => {
     const newSocket = io();
     setSocket(newSocket);
+    console.log(socket)
     return () => newSocket.close();
   }, []);
 
@@ -41,8 +43,10 @@ const Riwayat = ({ name, khodam, setName, setKhodam }) => {
   const hitIo = async () => {
     try {
       const response = await axios.get(
-        process.env.NEXT_PUBLIC_BASE_URL + "/api/socket"
+        baseURL + "/api/socket"
       );
+      console.log(baseURL)
+      console.log(response)
       return response;
     } catch (error) {
       console.error(error);

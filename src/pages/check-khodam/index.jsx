@@ -17,7 +17,6 @@ const CheckKhodam = ({}) => {
   const [warningOpen, setWarningOpen] = useState(true);
   const toast = useToast();
   const lKhodam = listKhodam();
-  const [trigger, setTrigger] = useState(0);
 
   const calculateKhodam = async () => {
     if (name === "") {

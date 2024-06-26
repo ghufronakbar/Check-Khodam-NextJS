@@ -1,3 +1,4 @@
+import { runMiddleware } from "@/utils/cors-middleware";
 import { Server } from "socket.io";
 
 export const config = {
@@ -8,7 +9,9 @@ export const config = {
 
 let io;
 
-const handler = (req, res) => {
+const handler = async (req, res) => {
+  await runMiddleware(req, res, cors);
+
   if (!io) {
     io = new Server(res.socket.server);
     res.socket.server.io = io;
