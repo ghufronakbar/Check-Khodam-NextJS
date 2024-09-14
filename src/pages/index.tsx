@@ -19,17 +19,17 @@ export const initStateResult: Result = {
 };
 
 const CheckKhodam = ({}) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState<string>("");
   const [result, setResult] = useState<Result>(initStateResult);
-  const [placeholder, setPlaceholder] = useState("");
-  const [resultOpen, setResultOpen] = useState(false);
-  const [warningOpen, setWarningOpen] = useState(true);
+  const [placeholder, setPlaceholder] = useState<string>("");
+  const [resultOpen, setResultOpen] = useState<boolean>(false);
+  const [warningOpen, setWarningOpen] = useState<boolean>(true);
   const toast = useToast();
 
   const calculateKhodam = async (e: React.FormEvent) => {
     e.preventDefault();
     if (resultOpen) {
-      return;
+      setResultOpen(false)
     }
     if (name === "") {
       return toast({
