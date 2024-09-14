@@ -28,6 +28,9 @@ const CheckKhodam = ({}) => {
 
   const calculateKhodam = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (resultOpen) {
+      return;
+    }
     if (name === "") {
       return toast({
         title: "Isi nama terlebih dahulu",
@@ -67,18 +70,26 @@ const CheckKhodam = ({}) => {
         setName={setName}
         calculateKhodam={calculateKhodam}
         placeholder={placeholder}
-      />      
+      />
       <Riwayat name={name} khodam={result.khodam} />
       <Copyright />
       <ModalResult
-        resultOpen={resultOpen}        
+        resultOpen={resultOpen}
         name={name}
         khodam={result.khodam}
         gambar={result.gambar}
         setResult={setResult}
-        onClose={() => {setResultOpen(false); setResult(initStateResult);setName("")}}
+        onClose={() => {
+          setResultOpen(false);
+          setResult(initStateResult);
+          setName("");
+        }}
       />
-      <ModalWarning warningOpen={warningOpen} setWarningOpen={setWarningOpen} onClose={() => setWarningOpen(false)} />
+      <ModalWarning
+        warningOpen={warningOpen}
+        setWarningOpen={setWarningOpen}
+        onClose={() => setWarningOpen(false)}
+      />
     </>
   );
 };
