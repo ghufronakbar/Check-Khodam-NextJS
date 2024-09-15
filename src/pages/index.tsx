@@ -1,5 +1,4 @@
 import khodams from "@/data/khodams";
-import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Copyright from "@/components/Copyright";
 import Riwayat from "@/components/Riwayat";
@@ -7,6 +6,7 @@ import Headers from "@/components/Header";
 import CekKhodam from "@/components/CekKhodam";
 import ModalResult from "@/components/ModalResult";
 import ModalWarning from "@/components/ModalWarning";
+import { useToast } from "@/components/Toast";
 
 export interface Result {
   khodam: string;
@@ -18,43 +18,34 @@ export const initStateResult: Result = {
   gambar: "",
 };
 
-const CheckKhodam = ({}) => {
+const CheckKhodam = () => {
   const [name, setName] = useState<string>("");
   const [result, setResult] = useState<Result>(initStateResult);
   const [placeholder, setPlaceholder] = useState<string>("");
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [warningOpen, setWarningOpen] = useState<boolean>(true);
-  const toast = useToast();
+  const { showToast } = useToast();
 
   const calculateKhodam = async (e: React.FormEvent) => {
     e.preventDefault();
     if (resultOpen) {
-      setResultOpen(false)
+      return;
     }
     if (name === "") {
-      return toast({
-        title: "Isi nama terlebih dahulu",
-        status: "error",
-        position: "bottom",
-        isClosable: true,
-      });
-    } else {
-      setName((prev) => `<strong>${prev}</strong>`);
-      const random = Math.floor(Math.random() * (khodams.length - 1));
-      setResult({
-        khodam: `<strong>${khodams[random].khodam}</strong>`,
-        gambar: khodams[random].gambar,
-      });
-      localStorage.setItem("name", name);
-      setPlaceholder(localStorage.getItem("name") || "");
-      toast({
-        title: "Berhasil Cek Khodam",
-        status: "success",
-        position: "bottom",
-        isClosable: true,
-      });
-      setResultOpen(true);
-    }
+      return showToast("Masukkan Nama", "info");
+    }    
+    const random = Math.floor(Math.random() * (khodams.length - 1));
+    setResult({
+      khodam: khodams[random].khodam,
+      gambar: khodams[random].gambar,
+    });    
+    localStorage.setItem("name", name);
+    setPlaceholder(localStorage.getItem("name") || "");
+    setResultOpen(true);
+    showToast(
+      `Cek Khodam  ${name.replace(/<[^>]*>/g, "")} Berhasil`,
+      "success"
+    );
   };
 
   useEffect(() => {
@@ -75,7 +66,7 @@ const CheckKhodam = ({}) => {
       <Copyright />
       <ModalResult
         resultOpen={resultOpen}
-        name={name}
+        name={placeholder}
         khodam={result.khodam}
         gambar={result.gambar}
         setResult={setResult}

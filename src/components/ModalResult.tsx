@@ -21,9 +21,9 @@ const ModalResult = ({
   return (
     <>
       {resultOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50" onClick={onClose}>
+        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-hidden" onClick={onClose}>
           <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="brutalism-container bg-[#FFA6F6] max-w-md w-full z-10" onClick={(e) => e.stopPropagation()}>
+          <div className="brutalism-container bg-[#FFA6F6] max-w-md w-full z-10 max-h-[90vh] overflow-y-auto hide-scrollbar" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold">Hasil Khodam Kamu</h2>
               <button
@@ -37,15 +37,15 @@ const ModalResult = ({
               </button>
             </div>
             <div className="mt-4">
-              <p dangerouslySetInnerHTML={{ __html: `Khodam ${name} adalah ${khodam}` }}>                
+              <p>    
+                Khodam <span className="font-bold">{name}</span> adalah <span className="font-bold">{khodam}</span>            
               </p>
               <Image
                 className="mt-2 w-full h-auto object-contain shadow-[4px_4px_0px_rgba(0,0,0,1)]"
                 width={500}
                 height={500}
                 src={gambar}
-                alt={`Harusnya gambar ${khodam.replace(/<[^>]*>/g, '')}, tapi gatau kalo ga muncul`}
-                // placeholder="blur"
+                alt={`Harusnya gambar ${khodam.replace(/<[^>]*>/g, '')}, tapi gatau kalo ga muncul`}                
               />
             </div>
             <div className="flex justify-end mt-4">

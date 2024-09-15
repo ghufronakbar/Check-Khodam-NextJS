@@ -4,14 +4,14 @@ import axios from "axios";
 import ListRiwayat from "@/components/ListRiwayat";
 import { io, Socket } from "socket.io-client";
 
-interface RiwayatProps {
+export interface RiwayatProps {
   name: string;
   khodam: string;
 }
 
 const Riwayat = ({ name, khodam }: RiwayatProps) => {  
   const [socket, setSocket] = useState<Socket | null>(null);  
-  const [riwayatCek, setRiwayatCek] = useState<string[]>([]);
+  const [riwayatCek, setRiwayatCek] = useState<RiwayatProps[]>([]);
 
   useEffect(() => {
     const newSocket = io();
@@ -28,23 +28,23 @@ const Riwayat = ({ name, khodam }: RiwayatProps) => {
   }, []);
 
   useEffect(() => {
-    if (khodam !== "" && socket) {
-      const newHistory = `${name} memiliki khodam ${khodam}. Berhati-hatilah!`;      
-      socket.emit("addKhodamCheck", newHistory);
+    if (khodam !== "" && socket) {      
+      socket.emit("addKhodamCheck", { name, khodam });
     }
   }, [khodam, name, socket]);
 
   useEffect(() => {
     if (socket) {      
-      socket.on("newKhodamCheck", (data: string) => {        
-        setRiwayatCek((prev) => [data, ...prev]);
+      socket.on("newKhodamCheck", ({ name, khodam }: RiwayatProps) => {                        
+
+        setRiwayatCek((prev) => [{ name, khodam }, ...prev]);
       });
 
       return () => {        
         socket.off("newKhodamCheck");
       };
     }
-  }, [socket]);
+  }, [socket,name]);
 
   useEffect(() => {    
     hitIo();
@@ -66,7 +66,7 @@ const Riwayat = ({ name, khodam }: RiwayatProps) => {
       >
         <NoData riwayatLength={riwayatCek.length} />
         {riwayatCek.map((item, index) => (
-          <ListRiwayat key={index} itemRiwayat={item} index={index} />
+          <ListRiwayat key={index} name={item.name} khodam={item.khodam} />
         ))}
       </div>
     </div>

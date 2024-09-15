@@ -8,24 +8,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: {
-          DEFAULT: "#1E3A8A", // Warna utama (biru gelap)
-          light: "#3B82F6", // Warna varian yang lebih terang
-          dark: "#1E40AF", // Warna varian yang lebih gelap
+      keyframes: {
+        "bounce-in-right": {
+          "0%": { opacity: "0", transform: "translateX(100%)" },
+          "60%": { opacity: "1", transform: "translateX(-20px)" },
+          "80%": { transform: "translateX(10px)" },
+          "100%": { transform: "translateX(0)" },
         },
-        secondary: {
-          DEFAULT: "#F59E0B", // Warna sekunder (kuning)
-          light: "#FCD34D", // Warna varian yang lebih terang
-          dark: "#D97706", // Warna varian yang lebih gelap
+        "shift-up": {
+          "0%": { transform: "translateY(0)", easing: "ease-in-out" },
+          "100%": { transform: "translateY(-100%)", easing: "ease-in-out" },
         },
-        tertiary: {
-          DEFAULT: "#10B981", // Warna tersier (hijau)
-          light: "#6EE7B7", // Warna varian yang lebih terang
-          dark: "#047857", // Warna varian yang lebih gelap
-        },
+      },
+      animation: {
+        "bounce-in-right": "bounce-in-right 0.5s ease-in-out",
+        "shift-up": "shift-up 0.5s ease-in-out",
       },
     },
   },

@@ -1,11 +1,11 @@
-interface ListRiwayatProps {
-  itemRiwayat: string;
-  index: number;
-}
+import { RiwayatProps } from "./Riwayat";
 
-const ListRiwayat = ({ itemRiwayat, index }: ListRiwayatProps) => {
+
+
+const ListRiwayat = ({ name, khodam }: RiwayatProps) => {
   return (
-    <div key={index} className="mt-2 brutalism-container bg-[#FF9F9F]" dangerouslySetInnerHTML={{ __html: itemRiwayat }}>      
+    <div className="mt-2 brutalism-container bg-[#FF9F9F]">      
+    <span className="font-bold">{name}</span> memiliki khodam <span className="font-bold">{khodam}</span>. Berhati-hatilah!
     </div>
   );
 };

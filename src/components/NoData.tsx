@@ -7,9 +7,9 @@ interface NoDataProps {
 const NoData = ({ riwayatLength }: NoDataProps) => {
   if (riwayatLength === 0) {
     return (
-      <div className="w-full h-full flex flex-row items-center justify-center gap-4">
+      <div className="w-full h-full flex flex-col md:flex-row items-center justify-center gap-4 px-4">
         <FaInfo />
-        <span className="font-bold">
+        <span className="font-bold text-center">
           Belum ada riwayat! Ayo cek khodam kamu!
         </span>
       </div>
